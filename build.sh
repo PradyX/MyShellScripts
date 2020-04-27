@@ -58,7 +58,7 @@ fi
 
 if [ $base = 2 ]
 then
-    echo -e "${RED}Low Ram Hack?${NC} ${BLUE}{y/n}${NC}"
+    echo -e "${YELLOW}Low Ram Hack?${NC} ${RED}{y/n}${NC}"
     read base
     if [[ $base = 'y' ]];then
     echo -e "${GREEN}Starting Build...${NC}"
