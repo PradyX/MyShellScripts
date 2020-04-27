@@ -27,18 +27,24 @@ printf "${NC}"
 cd /home/prady/derpfest
 export USE_CCACHE=1
 export CCACHE_EXEC=$(which ccache)
-                         
+
+build_low_ram(){
+    time (. build/envsetup.sh && lunch derp_jasmine_sprout-userdebug && mka api-stubs-docs && mka hiddenapi-lists-docs && mka system-api-stubs-docs && mka test-api-stubs-docs && mka kronic );
+}
+
+build_normal(){
+    time (. build/envsetup.sh && lunch derp_jasmine_sprout-userdebug && mka kronic);
+}
 echo ""
 echo -e "${YELLOW}Choose any Option :${NC}"
 echo -e " ${GREEN}1${NC} ${BLUE}Re-sync sauce${NC}"
-echo -e " ${GREEN}2${NC} ${BLUE}Start building${NC} {Low Ram Hack}"
-echo -e " ${GREEN}3${NC} ${BLUE}Start building ${NC} {Normal}"
-echo -e " ${GREEN}4${NC} ${BLUE}MAKE CLEAN${NC}"
-echo -e " ${GREEN}5${NC} ${BLUE}MAKE INSTALLCLEAN${NC}"
-echo -e " ${GREEN}6${NC} ${BLUE}Open target device folder${NC}"
-echo -e " ${GREEN}7${NC} ${BLUE}Start fetch script${NC}"
-echo -e " ${GREEN}8${NC} ${BLUE}Start kernel script${NC}"
-echo -e " ${GREEN}9${NC} ${BLUE}Flash karamel${NC}"
+echo -e " ${GREEN}2${NC} ${BLUE}Start building rom${NC}"
+echo -e " ${GREEN}3${NC} ${BLUE}MAKE CLEAN${NC}"
+echo -e " ${GREEN}4${NC} ${BLUE}MAKE INSTALLCLEAN${NC}"
+echo -e " ${GREEN}5${NC} ${BLUE}Open target device folder${NC}"
+echo -e " ${GREEN}6${NC} ${BLUE}Start fetch script${NC}"
+echo -e " ${GREEN}7${NC} ${BLUE}Start kernel script${NC}"
+echo -e " ${GREEN}8${NC} ${BLUE}Flash karamel${NC}"
 
 read base
 
@@ -52,55 +58,51 @@ fi
 
 if [ $base = 2 ]
 then
-echo -e "${GREEN}Starting Build...${NC}"
-time (. build/envsetup.sh && lunch derp_jasmine_sprout-userdebug && mka api-stubs-docs && mka hiddenapi-lists-docs && mka system-api-stubs-docs && mka test-api-stubs-docs && mka kronic )
+    echo -e "${RED}Low Ram Hack?${NC} ${BLUE}{y/n}${NC}"
+    read base
+    if [[ $base = 'y' ]];then
+    echo -e "${GREEN}Starting Build...${NC}"
+    build_low_ram
+    else
+    echo -e "${GREEN}Starting Build...${NC}"
+    build_normal 
+    fi
 echo -e "${YELLOW}Done!${NC}"
-pwd 
 cd /home/prady/MyScripts && ./telegram "DerpFest build completed for jasmeme at $(date +%Y%m%d-%H%M)!!! "
 fi
 
 if [ $base = 3 ]
-then
-echo -e "${GREEN}Starting Build...${NC}"
-time (. build/envsetup.sh && lunch derp_jasmine_sprout-userdebug && mka kronic)
-echo -e "${YELLOW}Done!${NC}"
-pwd 
-cd /home/prady/MyScripts && ./telegram "DerpFest build completed for jasmeme at $(date +%Y%m%d-%H%M)!!! "
-fi
-
-if [ $base = 4 ]
 then
 echo -e "${GREEN}Starting clean...${NC}"
 time make clean && make clobber
 echo -e "${YELLOW}Done!${NC}"
 fi
 
-if [ $base = 5 ]
+if [ $base = 4 ]
 then
 echo -e "${GREEN}Starting clean...${NC}"
 time make installclean
 echo -e "${YELLOW}Done!${NC}"
 fi
 
-if [ $base = 6 ]
+if [ $base = 5 ]
 then
 nemo out/target/product/jasmine_sprout
 echo -e "${YELLOW}Done!${NC}"
 fi
 
-if [ $base = 7 ]
+if [ $base = 6 ]
 then
-pwd
 cd /home/prady/MyScripts && ./fetch.sh
 fi
 
-if [ $base = 8 ]
+if [ $base = 7 ]
 then
 echo -e "${GREEN}Starting Script...${NC}"
 cd /home/prady/MyScripts && ./kernel.sh
 fi
 
-if [ $base = 9 ]
+if [ $base = 8 ]
 then
 cd /home/prady/MyScripts && ./flash.sh
 fi
