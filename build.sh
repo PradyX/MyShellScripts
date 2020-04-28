@@ -39,10 +39,10 @@ build_normal(){
 }
 
 notif_start(){
-    cd /home/prady/MyScripts && ./telegram "DerpFest build started for jasmeme at $(date +%Y%m%d-%H%M)"
+    cd /home/prady/MyScripts && ./telegram "DerpFest build started for jasmeme at $(date +%X)"
 }
 notif_done(){
-    cd /home/prady/MyScripts && ./telegram "DerpFest build completed for jasmeme at $(date +%Y%m%d-%H%M)"
+    cd /home/prady/MyScripts && ./telegram "DerpFest build completed for jasmeme at $(date +%X)"
 }
 
 echo ""
