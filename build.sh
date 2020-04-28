@@ -29,12 +29,22 @@ export USE_CCACHE=1
 export CCACHE_EXEC=$(which ccache)
 
 build_low_ram(){
+    cd /home/prady/derpfest
     time (. build/envsetup.sh && lunch derp_jasmine_sprout-userdebug && mka api-stubs-docs && mka hiddenapi-lists-docs && mka system-api-stubs-docs && mka test-api-stubs-docs && mka kronic );
 }
 
 build_normal(){
+    cd /home/prady/derpfest
     time (. build/envsetup.sh && lunch derp_jasmine_sprout-userdebug && mka kronic);
 }
+
+notif_start(){
+    cd /home/prady/MyScripts && ./telegram "DerpFest build started for jasmeme at $(date +%Y%m%d-%H%M)"
+}
+notif_done(){
+    cd /home/prady/MyScripts && ./telegram "DerpFest build completed for jasmeme at $(date +%Y%m%d-%H%M)"
+}
+
 echo ""
 echo -e "${YELLOW}Choose any Option :${NC}"
 echo -e " ${GREEN}1${NC} ${BLUE}Re-sync sauce${NC}"
@@ -62,13 +72,15 @@ then
     read base
     if [[ $base = 'y' ]];then
     echo -e "${GREEN}Starting Build...${NC}"
+    notif_start
     build_low_ram
     else
     echo -e "${GREEN}Starting Build...${NC}"
+    notif_start
     build_normal 
     fi
 echo -e "${YELLOW}Done!${NC}"
-cd /home/prady/MyScripts && ./telegram "DerpFest build completed for jasmeme at $(date +%Y%m%d-%H%M)!!! "
+notif_done
 fi
 
 if [ $base = 3 ]
