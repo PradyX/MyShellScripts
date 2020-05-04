@@ -47,10 +47,10 @@ adb_wait()
   done
 }
 
+notif_adb_reb
+adb reboot recovery
+
+notif_adb_push
 cd /home/prady/derpfest/out/target/product/jasmine_sprout/
-# notif_adb_push
 pwd
 adb push ${BUILD_FILE_NAME} /sdcard/xflashing
-
-# notif_adb_reb
-# adb reboot recovery
