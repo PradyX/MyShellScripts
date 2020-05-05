@@ -9,17 +9,19 @@ NC="\033[0m" # reset color
 cd
 BUILD_FILE_NAME='Derp*.zip'
 ADB_DEST_FOLDER='/home/prady/platform-tools'
+SCRIPT=/home/prady/MyScripts
+PRODUCT_PATH=/home/prady/derpfest/out/target/product/jasmine_sprout/
 
 notif_adb_push(){
-    cd /home/prady/MyScripts && ./telegram "Pushing zip to /sdcard/flashing"
+    cd ${SCRIPT} && ./telegram "Pushing zip to /sdcard/flashing"
 }
 notif_adb_reb(){
     echo -e "${YELLOW}Rebooting to Recovery${NC}"
-    cd /home/prady/MyScripts && ./telegram "Rebooting to Recovery"
+    cd ${SCRIPT} && ./telegram "Rebooting to Recovery"
 }
 notif_adb_fl(){
     echo -e "${YELLOW}Flashing to Inactive Slot${NC}"
-    cd /home/prady/MyScripts && ./telegram "Flashing to Inactive Slot"
+    cd ${SCRIPT} && ./telegram "Flashing to Inactive Slot"
 }
 
 # resets adb server
@@ -52,6 +54,6 @@ adb reboot recovery
 
 adb_wait
 notif_adb_push
-cd /home/prady/derpfest/out/target/product/jasmine_sprout/
+cd ${PRODUCT_PATH}
 pwd
 adb push ${BUILD_FILE_NAME} /sdcard/xflashing
