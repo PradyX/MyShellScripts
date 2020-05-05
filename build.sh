@@ -30,6 +30,7 @@ export CCACHE_EXEC=$(which ccache)
 
 BUILD_FILE_NAME='Derp*.zip'
 SCRIPT=/home/prady/MyScripts
+PRODUCT_PATH=/home/prady/derpfest/out/target/product/jasmine_sprout/
 
 build_low_ram(){
     cd /home/prady/derpfest
@@ -46,6 +47,9 @@ notif_start(){
 }
 notif_done(){
     cd ${SCRIPT} && ./telegram "DerpFest build completed for jasmeme at $(date +%X)"
+}
+notif_upload(){
+    cd ${SCRIPT} && ./telegram "Upload to Gdrive sucessfull, get it from https://drive.google.com/open?id=1MfBUuktApHZqvtd2qfbcSUNmmmfw4Q3L"
 }
 
 echo ""
@@ -125,10 +129,9 @@ fi
 
 if [ $base = 9 ]
 then
-cd ${SCRIPT} && ./telegram "Pushing build to Gdrive"
-cd /home/prady/derpfest/out/target/product/jasmine_sprout/
+cd ${SCRIPT} && ./telegram "Uploading build to GDRIVE"
+cd ${PRODUCT_PATH}
 pwd
 echo "Pushing ${BUILD_FILE_NAME}"
-rclone copy --retries 3 ${BUILD_FILE_NAME} "gdrive:mia2/derpfest" 
-cd ${SCRIPT} && ./telegram "Upload to Gdrive sucessfull, get it from https://drive.google.com/open?id=1MfBUuktApHZqvtd2qfbcSUNmmmfw4Q3L"
+rclone copy --retries 3 ${BUILD_FILE_NAME} "gdrive:mia2/rclone" 
 fi
