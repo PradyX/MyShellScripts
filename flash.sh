@@ -50,6 +50,7 @@ adb_wait()
 notif_adb_reb
 adb reboot recovery
 
+adb_wait
 notif_adb_push
 cd /home/prady/derpfest/out/target/product/jasmine_sprout/
 pwd
