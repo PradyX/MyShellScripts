@@ -42,10 +42,10 @@ build_normal(){
 }
 
 notif_start(){
-    cd /home/prady/MyScripts && ./telegram "DerpFest build started for jasmeme at $(date +%X)"
+    cd ${SCRIPT} && ./telegram "DerpFest build started for jasmeme at $(date +%X)"
 }
 notif_done(){
-    cd /home/prady/MyScripts && ./telegram "DerpFest build completed for jasmeme at $(date +%X)"
+    cd ${SCRIPT} && ./telegram "DerpFest build completed for jasmeme at $(date +%X)"
 }
 
 echo ""
@@ -109,26 +109,26 @@ fi
 
 if [ $base = 6 ]
 then
-cd /home/prady/MyScripts && ./fetch.sh
+cd ${SCRIPT} && ./fetch.sh
 fi
 
 if [ $base = 7 ]
 then
 echo -e "${GREEN}Starting Script...${NC}"
-cd /home/prady/MyScripts && ./kernel.sh
+cd ${SCRIPT} && ./kernel.sh
 fi
 
 if [ $base = 8 ]
 then
-cd /home/prady/MyScripts && ./flash.sh
+cd ${SCRIPT} && ./flash.sh
 fi
 
 if [ $base = 9 ]
 then
-cd /home/prady/MyScripts && ./telegram "Pushing build to Gdrive"
+cd ${SCRIPT} && ./telegram "Pushing build to Gdrive"
 cd /home/prady/derpfest/out/target/product/jasmine_sprout/
 pwd
 echo "Pushing ${BUILD_FILE_NAME}"
 rclone copy --retries 3 ${BUILD_FILE_NAME} "gdrive:mia2/derpfest" 
-cd /home/prady/MyScripts && ./telegram "Upload to Gdrive sucessfull, get it from https://drive.google.com/open?id=1MfBUuktApHZqvtd2qfbcSUNmmmfw4Q3L"
+cd ${SCRIPT} && ./telegram "Upload to Gdrive sucessfull, get it from https://drive.google.com/open?id=1MfBUuktApHZqvtd2qfbcSUNmmmfw4Q3L"
 fi
