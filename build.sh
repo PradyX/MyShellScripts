@@ -31,6 +31,7 @@ export CCACHE_EXEC=$(which ccache)
 BUILD_FILE_NAME='Derp*.zip'
 SCRIPT=/home/prady/MyScripts
 PRODUCT_PATH=/home/prady/derpfest/out/target/product/jasmine_sprout/
+BUILD_NAME=$(find D*.zip)
 
 build_low_ram(){
     cd /home/prady/derpfest
@@ -69,7 +70,7 @@ read base
 if [ $base = 1 ]
 then
 echo -e "${GREEN}Starting Sync...${NC}"
-#time repo sync -j$ (nproc --all) --force-sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-broken
+#time repo sync -j$(nproc --all) --force-sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-broken
 time repo sync -j4 --force-sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-broken
 echo -e "${YELLOW}Done!${NC}"
 fi
@@ -129,9 +130,25 @@ fi
 
 if [ $base = 9 ]
 then
-cd ${SCRIPT} && ./telegram "Uploading build to GDRIVE"
-cd ${PRODUCT_PATH}
-pwd
-echo "Pushing ${BUILD_FILE_NAME}"
-rclone copy --retries 3 ${BUILD_FILE_NAME} "gdrive:mia2/rclone" 
+echo -e "${YELLOW}Upload to SF?${NC} ${RED}{y/n}${NC}"
+    read base
+    if [[ $base = 'y' ]];then
+    echo "Uploading ${BUILD_NAME} to SF"
+    cd ${SCRIPT} && ./telegram "Uploading build to SF started at $(date +%X)"
+    cd ${PRODUCT_PATH}
+    pwd
+    sftp prady@web.sourceforge.net
+    # cd /home/frs/project/derpfest/jasmine_sprout
+    # put ${BUILD_FILE_NAME}
+    cd ${SCRIPT} && ./telegram "Uploading completed to SF at $(date +%X), visit https://sourceforge.net/projects/derpfest/files/jasmine_sprout/"
+    echo "Uploading ${BUILD_NAME} finished."
+    else
+    cd ${SCRIPT} && ./telegram "Uploading build to GDRIVE started at $(date +%X)"
+    cd ${PRODUCT_PATH}
+    pwd
+    echo "Uploading ${BUILD_NAME} to GDRIVE"
+    rclone copy --retries 3 ${BUILD_FILE_NAME} "gdrive:mia2/rclone" 
+    cd ${SCRIPT} && ./telegram "Uploading completed to GDRIVE at $(date +%X), visit https://drive.google.com/open?id=1MfBUuktApHZqvtd2qfbcSUNmmmfw4Q3L"
+    echo "Uploading ${BUILD_NAME} finished."
+    fi
 fi
