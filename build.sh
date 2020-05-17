@@ -49,8 +49,13 @@ notif_start(){
 notif_done(){
     cd ${SCRIPT} && ./telegram "DerpFest build completed for jasmeme at $(date +%X)"
 }
-notif_upload(){
-    cd ${SCRIPT} && ./telegram "Upload to Gdrive sucessfull, get it from https://drive.google.com/open?id=1MfBUuktApHZqvtd2qfbcSUNmmmfw4Q3L"
+notif_upload_sf(){
+    cd ${SCRIPT} && ./telegram "Uploading completed to SF at $(date +%X), visit https://sourceforge.net/projects/derpfest/files/jasmine_sprout/"
+    echo "Uploading ${BUILD_NAME} finished."
+}
+notif_upload_gdrive(){
+    cd ${SCRIPT} && ./telegram "Uploading completed to GDRIVE at $(date +%X), visit https://drive.google.com/open?id=1MfBUuktApHZqvtd2qfbcSUNmmmfw4Q3L"
+    echo "Uploading ${BUILD_NAME} finished."
 }
 
 echo ""
@@ -146,18 +151,15 @@ echo -e "${YELLOW}Upload to SF?${NC} ${RED}{y/n}${NC}"
     else
     scp ${BUILD_FILE_NAME} prady@frs.sourceforge.net:/home/frs/project/derpfest/jasmine_sprout
     fi
+    notif_upload_sf
 
-    cd ${SCRIPT} && ./telegram "Uploading completed to SF at $(date +%X), visit https://sourceforge.net/projects/derpfest/files/jasmine_sprout/"
-    echo "Uploading ${BUILD_NAME} finished."
-    
     else
-    
+
     cd ${SCRIPT} && ./telegram "Uploading build to GDRIVE started at $(date +%X)"
     cd ${PRODUCT_PATH}
     pwd
     echo "Uploading ${BUILD_NAME} to GDRIVE"
     rclone copy --retries 3 ${BUILD_FILE_NAME} "gdrive:mia2/rclone" 
-    cd ${SCRIPT} && ./telegram "Uploading completed to GDRIVE at $(date +%X), visit https://drive.google.com/open?id=1MfBUuktApHZqvtd2qfbcSUNmmmfw4Q3L"
-    echo "Uploading ${BUILD_NAME} finished."
+    notif_upload_gdrive
     fi
 fi
