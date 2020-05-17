@@ -63,7 +63,7 @@ echo -e " ${GREEN}5${NC} ${BLUE}Open target device folder${NC}"
 echo -e " ${GREEN}6${NC} ${BLUE}Start fetch script${NC}"
 echo -e " ${GREEN}7${NC} ${BLUE}Start kernel script${NC}"
 echo -e " ${GREEN}8${NC} ${BLUE}Flash karamel${NC}"
-echo -e " ${GREEN}9${NC} ${BLUE}Upload to GDRIVE${NC}"
+echo -e " ${GREEN}9${NC} ${BLUE}Upload Build [SF/Gdrive]${NC}"
 
 read base
 
@@ -137,12 +137,21 @@ echo -e "${YELLOW}Upload to SF?${NC} ${RED}{y/n}${NC}"
     cd ${SCRIPT} && ./telegram "Uploading build to SF started at $(date +%X)"
     cd ${PRODUCT_PATH}
     pwd
+    echo "Sftp ${BUILD_NAME} [y/n]"
+    read base
+    if [[ $base = 'y' ]];then
     sftp prady@web.sourceforge.net
     # cd /home/frs/project/derpfest/jasmine_sprout
     # put ${BUILD_FILE_NAME}
+    else
+    scp ${BUILD_FILE_NAME} prady@frs.sourceforge.net:/home/frs/project/derpfest/jasmine_sprout
+    fi
+
     cd ${SCRIPT} && ./telegram "Uploading completed to SF at $(date +%X), visit https://sourceforge.net/projects/derpfest/files/jasmine_sprout/"
     echo "Uploading ${BUILD_NAME} finished."
+    
     else
+    
     cd ${SCRIPT} && ./telegram "Uploading build to GDRIVE started at $(date +%X)"
     cd ${PRODUCT_PATH}
     pwd
