@@ -62,13 +62,12 @@ echo ""
 echo -e "${YELLOW}Choose any Option :${NC}"
 echo -e " ${GREEN}1${NC} ${BLUE}Re-sync sauce${NC}"
 echo -e " ${GREEN}2${NC} ${BLUE}Start building rom${NC}"
-echo -e " ${GREEN}3${NC} ${BLUE}MAKE CLEAN${NC}"
-echo -e " ${GREEN}4${NC} ${BLUE}MAKE INSTALLCLEAN${NC}"
-echo -e " ${GREEN}5${NC} ${BLUE}Open target device folder${NC}"
-echo -e " ${GREEN}6${NC} ${BLUE}Start fetch script${NC}"
-echo -e " ${GREEN}7${NC} ${BLUE}Start kernel script${NC}"
-echo -e " ${GREEN}8${NC} ${BLUE}Flash karamel${NC}"
-echo -e " ${GREEN}9${NC} ${BLUE}Upload Build [SF/Gdrive]${NC}"
+echo -e " ${GREEN}3${NC} ${BLUE}Start CLEANUP${NC}"
+echo -e " ${GREEN}4${NC} ${BLUE}Open target device folder${NC}"
+echo -e " ${GREEN}5${NC} ${BLUE}Start fetch script${NC}"
+echo -e " ${GREEN}6${NC} ${BLUE}Start kernel script${NC}"
+echo -e " ${GREEN}7${NC} ${BLUE}Flash karamel${NC}"
+echo -e " ${GREEN}8${NC} ${BLUE}Upload Build [SF/Gdrive]${NC}"
 
 read base
 
@@ -99,41 +98,41 @@ fi
 
 if [ $base = 3 ]
 then
-echo -e "${GREEN}Starting clean...${NC}"
-time make clean && make clobber
+    echo -e "${YELLOW}Full clean?${NC} ${RED}{y/n}${NC}"
+    read base
+    if [[ $base = 'y' ]];then
+    echo -e "${GREEN}Starting full clean...${NC}"
+    time make clean && make clobber
+    else
+    echo -e "${GREEN}Starting partial clean...${NC}"
+    time make installclean
+    fi
 echo -e "${YELLOW}Done!${NC}"
 fi
 
 if [ $base = 4 ]
 then
-echo -e "${GREEN}Starting clean...${NC}"
-time make installclean
+nemo out/target/product/jasmine_sprout
 echo -e "${YELLOW}Done!${NC}"
 fi
 
 if [ $base = 5 ]
 then
-nemo out/target/product/jasmine_sprout
-echo -e "${YELLOW}Done!${NC}"
-fi
-
-if [ $base = 6 ]
-then
 cd ${SCRIPT} && ./fetch.sh
 fi
 
-if [ $base = 7 ]
+if [ $base = 6 ]
 then
 echo -e "${GREEN}Starting Script...${NC}"
 cd ${SCRIPT} && ./kernel.sh
 fi
 
-if [ $base = 8 ]
+if [ $base = 7 ]
 then
 cd ${SCRIPT} && ./flash.sh
 fi
 
-if [ $base = 9 ]
+if [ $base = 8 ]
 then
 echo -e "${YELLOW}Upload to SF?${NC} ${RED}{y/n}${NC}"
     read base
