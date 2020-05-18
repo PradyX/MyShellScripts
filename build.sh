@@ -158,7 +158,7 @@ echo -e "${YELLOW}Upload to SF?${NC} ${RED}{y/n}${NC}"
     cd ${PRODUCT_PATH}
     pwd
     echo "Uploading ${BUILD_NAME} to GDRIVE"
-    rclone copy --retries 3 ${BUILD_FILE_NAME} "gdrive:mia2/rclone" 
+    rclone copy -update --verbose --checkers 8 --retries 3 --low-level-retries 10 --stats 1s ${BUILD_FILE_NAME} "gdrive:mia2/rclone" 
     notif_upload_gdrive
     fi
 fi
