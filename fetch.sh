@@ -8,6 +8,8 @@ BLUE="\033[1;36m" # For info
 NC="\033[0m" # reset color
 
 cd /home/prady/derpfest
+ROM_NAME=#rumName
+ROM_SED=s/lucid/${ROM_NAME}/g
 
 echo -e "${GREEN}
      _____    _       _       ____            _       _   
@@ -28,6 +30,7 @@ echo -e "${GREEN}3${NC} ${BLUE}Fetch android_vendor_xiaomi_sdm660-common${NC}   
 echo -e "${GREEN}4${NC} ${BLUE}Fetch android_vendor_xiaomi_wayne${NC}   lineage-17.0"
 echo -e "${GREEN}5${NC} ${BLUE}Fetch android_kernel_xiaomi_sdm660${NC}  kernel.lnx.4.4.r38-rel-wifi"
 echo -e "${GREEN}6${NC} ${BLUE}Fetch PradyX/android_kernel_xiaomi_sdm660${NC}   eas"
+echo -e "${GREEN}7${NC} ${BLUE}Edit device tree${NC}"
 read base
 
 if [ $base = 0 ]
@@ -80,5 +83,15 @@ if [ $base = 6 ]
 then
 echo -e "${GREEN}Starting fetch...${NC}"
 cd kernel/xiaomi/sdm660 && git fetch https://github.com/PradyX/android_kernel_xiaomi_sdm660.git eas
+echo -e "${YELLOW}Done!${NC}"
+fi
+
+if [ $base = 6 ]
+then
+echo -e "${GREEN}Editing dt...${NC}"
+cd device/xiaomi/jasmine_sprout
+mv lucid_jasmine_sprout.mk ${ROM_NAME}_jasmine_sprout.mk
+sed -i ${ROM_SED} ${ROM_NAME}_jasmine_sprout.mk
+sed -i ${ROM_SED} AndroidProducts.mk
 echo -e "${YELLOW}Done!${NC}"
 fi
