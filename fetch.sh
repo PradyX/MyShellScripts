@@ -21,14 +21,25 @@ echo -e "${GREEN}                      by @Prady${NC}"
 
 echo ""
 echo -e "${YELLOW}Choose any Option :${NC}"
+echo -e "${GREEN}0${NC} ${BLUE}Clone all device sources${NC}"
 echo -e "${GREEN}1${NC} ${BLUE}Fetch android_device_xiaomi_sdm660-common${NC}   cr-8.0"
 echo -e "${GREEN}2${NC} ${BLUE}Fetch android_device_xiaomi_jasmine_sprout${NC}  cr-8.0"
 echo -e "${GREEN}3${NC} ${BLUE}Fetch android_vendor_xiaomi_sdm660-common${NC}   cr-8.0-eas"
 echo -e "${GREEN}4${NC} ${BLUE}Fetch android_vendor_xiaomi_wayne${NC}   lineage-17.0"
 echo -e "${GREEN}5${NC} ${BLUE}Fetch android_kernel_xiaomi_sdm660${NC}  kernel.lnx.4.4.r38-rel-wifi"
 echo -e "${GREEN}6${NC} ${BLUE}Fetch PradyX/android_kernel_xiaomi_sdm660${NC}   eas"
-
 read base
+
+if [ $base = 0 ]
+then
+echo -e "${GREEN}Cloning...${NC}"
+git clone https://github.com/DerpFest-Devices/android_device_xiaomi_jasmine_sprout.git -b lucid "device/xiaomi/jasmine_sprout"
+git clone https://github.com/DerpFest-Devices/android_device_xiaomi_sdm660-common.git "device/xiaomi/sdm660-common"
+git clone https://github.com/xiaomi-sdm660/android_vendor_xiaomi_wayne.git "vendor/xiaomi/wayne"
+git clone https://github.com/xiaomi-sdm660/android_vendor_xiaomi_sdm660-common.git "vendor/xiaomi/sdm660-common"
+git clone https://github.com/PradyX/unified_kernel_sdm660.git -b master "kernel/xiaomi/sdm660"
+echo -e "${YELLOW}Done!${NC}"
+fi
 
 if [ $base = 1 ]
 then
