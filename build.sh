@@ -82,22 +82,32 @@ fi
 
 if [ $base = 2 ]
 then
-    # echo -e "${YELLOW}Wiping Product DIR${NC}"
-    # rm -rf /home/prady/derpfest/out/target/product/jasmine_sprout
-    # echo -e "${YELLOW}Done!${NC}"
 
-    echo -e "${YELLOW}Low Ram Hack?${NC} ${RED}{y/n}${NC}"
+building(){
+        echo -e "${YELLOW}Low Ram Hack?${NC} ${RED}{y/n}${NC}"
+        read base
+        if [[ $base = 'y' ]];then
+        echo -e "${GREEN}Starting Build...${NC}"
+        notif_start
+        build_low_ram
+        else
+        echo -e "${GREEN}Starting Build...${NC}"
+        notif_start
+        build_normal 
+        fi
+    }
+
+    echo -e "${YELLOW}Wipe product DIR?${NC} ${RED}{y/n}${NC}"
     read base
     if [[ $base = 'y' ]];then
-    echo -e "${GREEN}Starting Build...${NC}"
-    notif_start
-    build_low_ram
+    echo -e "${YELLOW}Wiping product DIR${NC}"
+    rm -rf /home/prady/derpfest/out/target/product/jasmine_sprout
+    echo -e "${GREEN}Done!${NC}"
+    building
     else
-    echo -e "${GREEN}Starting Build...${NC}"
-    notif_start
-    build_normal 
+    building
     fi
-echo -e "${YELLOW}Done!${NC}"
+echo -e "${GREEN}Done!${NC}"
 notif_done
 fi
 
