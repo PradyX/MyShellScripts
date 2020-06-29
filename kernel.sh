@@ -32,7 +32,7 @@ JOBS="$(( CPU * 2 ))"
 
 # function
 build(){
-    make O=out ARCH=arm64 jasmine-perf_defconfig
+    make O=out ARCH=arm64 wayne_defconfig
     time (
         PATH=/home/prady/proton-clang/bin:${PATH} \
         make -j"${JOBS}" O=out \
@@ -63,6 +63,8 @@ echo " "
 echo -e " ${GREEN}1${NC} ${BLUE}Start building? ${NC}"
 echo -e " ${GREEN}2${NC} ${BLUE}Open out dir ${NC}"
 echo -e " ${GREEN}3${NC} ${BLUE}Flash karamel${NC}"
+echo -e " ${GREEN}4${NC} ${BLUE}Update Wireguard${NC}"
+
 read base
 
 if [ $base = 1 ]
@@ -86,7 +88,21 @@ then
 nemo out/arch/arm64/boot
 fi
 
+if [ $base = 4 ]
+then
 
+USER_AGENT="WireGuard-AndroidROMBuild/0.3 ($(uname -a))"
+
+read -p "Enter version: " VERSION
+
+rm -rf net/wireguard
+mkdir -p net/wireguard
+curl -A "$USER_AGENT" -LsS --connect-timeout 30 "https://git.zx2c4.com/wireguard-linux-compat/snapshot/wireguard-linux-compat-$VERSION.tar.xz" | tar -C "net/wireguard" -xJf - --strip-components=2 "wireguard-linux-compat-$VERSION/src"
+sed -i 's/tristate/bool/;s/default m/default y/;' net/wireguard/Kconfig
+git add net/wireguard
+git commit -s -m "net: wireguard: Update to $VERSION"
+
+fi
 # if [ $base = 1 ]
 # then
 # echo -e "${GREEN}Starting build...${NC}"
