@@ -35,26 +35,27 @@ BUILD_NAME=$(find D*.zip)
 
 build_low_ram(){
     cd /home/prady/derpfest
-    time (. build/envsetup.sh && lunch derp_jasmine_sprout-userdebug && mka api-stubs-docs && mka hiddenapi-lists-docs && mka system-api-stubs-docs && mka test-api-stubs-docs && mka kronic );
+    time (. build/envsetup.sh && lunch derp_jasmine_sprout-userdebug && mka api-stubs-docs && mka hiddenapi-lists-docs && mka system-api-stubs-docs && mka test-api-stubs-docs && mka kronic ) 2>&1 | tee output.log 
 }
 
 build_normal(){
     cd /home/prady/derpfest
-    time (. build/envsetup.sh && lunch derp_jasmine_sprout-userdebug && mka kronic);
+    time (. build/envsetup.sh && lunch derp_jasmine_sprout-userdebug && mka kronic) 2>&1 | tee output.log 
 }
 
 notif_start(){
-    cd ${SCRIPT} && ./telegram "DerpFest build started for jasmeme at $(date +%X)"
+    telegram-send --format markdown "*DerpFest* build started for *jasmeme* at *$(date +%X)*"
 }
 notif_done(){
-    cd ${SCRIPT} && ./telegram "DerpFest build completed for jasmeme at $(date +%X)"
+    #telegram-send --format markdown "*DerpFest* build completed for *jasmeme* at *$(date +%X)*"
+    telegram-send --file output.log --caption "DerpFest build completed for jasmeme at $(date +%X)"
 }
 notif_upload_sf(){
-    cd ${SCRIPT} && ./telegram "Uploading completed to SF at $(date +%X), visit https://sourceforge.net/projects/derpfest/files/jasmine_sprout/"
+    telegram-send  "Uploading completed to SF at $(date +%X), visit https://sourceforge.net/projects/derpfest/files/jasmine_sprout/"
     echo "Uploading ${BUILD_NAME} finished."
 }
 notif_upload_gdrive(){
-    cd ${SCRIPT} && ./telegram "Uploading completed to GDRIVE at $(date +%X), visit https://drive.google.com/open?id=1MfBUuktApHZqvtd2qfbcSUNmmmfw4Q3L"
+    telegram-send --format markdown "Uploading completed to *GDRIVE* at *$(date +%X)*, visit https://drive.google.com/open?id=1MfBUuktApHZqvtd2qfbcSUNmmmfw4Q3L"
     echo "Uploading ${BUILD_NAME} finished."
 }
 
@@ -81,6 +82,10 @@ fi
 
 if [ $base = 2 ]
 then
+    # echo -e "${YELLOW}Wiping Product DIR${NC}"
+    # rm -rf /home/prady/derpfest/out/target/product/jasmine_sprout
+    # echo -e "${YELLOW}Done!${NC}"
+
     echo -e "${YELLOW}Low Ram Hack?${NC} ${RED}{y/n}${NC}"
     read base
     if [[ $base = 'y' ]];then
@@ -154,11 +159,11 @@ echo -e "${YELLOW}Upload to SF?${NC} ${RED}{y/n}${NC}"
 
     else
 
-    cd ${SCRIPT} && ./telegram "Uploading build to GDRIVE started at $(date +%X)"
+    telegram-send "Uploading build to GDRIVE started at $(date +%X)"
     cd ${PRODUCT_PATH}
     pwd
     echo "Uploading ${BUILD_NAME} to GDRIVE"
-    rclone copy -update --verbose --checkers 8 --retries 3 --low-level-retries 10 --stats 1s ${BUILD_FILE_NAME} "gdrive:mia2/rclone" 
+    rclone copy --update --verbose --checkers 8 --retries 3 --low-level-retries 10 --stats 1s ${BUILD_FILE_NAME} "gdrive:mia2/rclone" 
     notif_upload_gdrive
     fi
 fi
