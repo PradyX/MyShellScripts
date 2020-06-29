@@ -90,6 +90,8 @@ fi
 
 if [ $base = 4 ]
 then
+echo "Opening wireguard webpage..."
+python -mwebbrowser https://git.zx2c4.com/wireguard-linux-compat/
 
 USER_AGENT="WireGuard-AndroidROMBuild/0.3 ($(uname -a))"
 
