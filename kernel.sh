@@ -45,7 +45,7 @@ build(){
                       OBJDUMP=llvm-objdump \
                       STRIP=llvm-strip \
                       CROSS_COMPILE_ARM32=arm-linux-gnueabi- \
-                      CROSS_COMPILE=aarch64-linux-gnu- |tee ../compile.log ;
+                      CROSS_COMPILE=aarch64-linux-gnu- 2>&1 | tee  ../compile.log ;
     );
 } 
 
@@ -73,7 +73,7 @@ echo -e "${GREEN}Starting build...${NC}"
     echo -en "${YELLOW}MAKE CLEAN? y/[${BLUE}n${YELLOW}]: ${NC}"
     read clean
     if [[ $clean = 'y' ]]; then
-        make clean && make mrproper O=out
+        make mrproper O=out && make clean
         build
         zip
     else
