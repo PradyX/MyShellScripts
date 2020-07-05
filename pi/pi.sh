@@ -14,13 +14,14 @@ wifi(){
     sudo cp 50-cloud-init.yaml 50-cloud-init.yaml.bak
     echo "Delete *cloud-init.yaml"
     sudo rm -rf 50-cloud-init.yaml
-    cd && cd sc/pi 
+    cd && cd /mnt/usb/deb/sc/pi
     sudo cp -r 50-cloud-init.yaml /etc/netplan/
 }
 
 echo ""
 echo -e "${YELLOW}Choose any Option :${NC}"
 echo -e " ${GREEN}1${NC} ${BLUE}Add wifi${NC}"
+echo -e " ${GREEN}2${NC} ${BLUE}Install apt-fast${NC}"
 
 read base
 
@@ -38,5 +39,15 @@ echo -e "${YELLOW}Apply settings & reboot?${NC} ${RED}{y/n}${NC}"
         else
         exit
         fi
+echo -e "${YELLOW}Done!${NC}"
+fi
+
+if [ $base = 2 ]
+then
+echo -e "${GREEN}Setting up wifi...${NC}"
+sudo apt install -y axel aria2
+sudo add-apt-repository ppa:apt-fast/stable
+sudo apt-get update
+sudo apt-get -y install apt-fast
 echo -e "${YELLOW}Done!${NC}"
 fi
